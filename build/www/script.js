@@ -1152,18 +1152,20 @@ BonziData.event_list_bees = [
 ];
 
 var chatTypingUsers = {};
+var myGuid = null;
+var myName = null;
 
 function updateChatTypingDisplay() {
 	var names = Object.values(chatTypingUsers);
 	var el = $("#bonzi_chat_typing");
 	if (names.length === 0) {
-		el.text("");
+		el.text("").hide();
 	} else if (names.length === 1) {
-		el.text(names[0] + " is typing...");
+		el.text(names[0] + " is typing...").show();
 	} else if (names.length === 2) {
-		el.text(names[0] + " and " + names[1] + " are typing...");
+		el.text(names[0] + " and " + names[1] + " are typing...").show();
 	} else {
-		el.text(names.slice(0, -1).join(", ") + " and " + names[names.length - 1] + " are typing...");
+		el.text(names.slice(0, -1).join(", ") + " and " + names[names.length - 1] + " are typing...").show();
 	}
 }
 
@@ -1502,6 +1504,10 @@ function setup() {
 		if ($(this).val().length > 0 && !isCurrentlyTyping) {
 			isCurrentlyTyping = true;
 			socket.emit("typing", { isTyping: true });
+			if (myGuid && myName) {
+				chatTypingUsers[myGuid] = myName + " (You)";
+				updateChatTypingDisplay();
+			}
 		}
 		
 		clearTimeout(typingTimeout);
@@ -1510,6 +1516,10 @@ function setup() {
 			if (isCurrentlyTyping) {
 				isCurrentlyTyping = false;
 				socket.emit("typing", { isTyping: false });
+				if (myGuid) {
+					delete chatTypingUsers[myGuid];
+					updateChatTypingDisplay();
+				}
 			}
 		}, 1000);
 	});
@@ -1518,6 +1528,10 @@ function setup() {
 		if (e.which == 13) {
 			isCurrentlyTyping = false;
 			socket.emit("typing", { isTyping: false });
+			if (myGuid) {
+				delete chatTypingUsers[myGuid];
+				updateChatTypingDisplay();
+			}
 		}
 	});
 
@@ -1531,6 +1545,8 @@ function setup() {
 	socket.on("updateAll", function(data) {
 		$("#page_login").hide();
 		usersPublic = data.usersPublic;
+		myGuid = data.guid;
+		myName = data.usersPublic[data.guid] ? data.usersPublic[data.guid].name : $("#login_name").val();
 		usersUpdate();
 		BonziHandler.bonzisCheck();
 	});
@@ -1668,6 +1684,10 @@ function usersUpdate() {
 function sendInput() {
 	var text = $("#chat_message").val();
 	$("#chat_message").val("");
+	if (myGuid) {
+		delete chatTypingUsers[myGuid];
+		updateChatTypingDisplay();
+	}
 	if (text.length > 0) {
 		var youtube = youtubeParser(text);
 		if (youtube) {
