@@ -46,6 +46,8 @@ class Bonzi {
 
 		this.mute = false;
 
+		this.isTyping = false;
+
 		this.eventTypeToFunc = {
 			"anim": "updateAnim",
 			"html": "updateText",
@@ -439,7 +441,18 @@ class Bonzi {
 		this.$element.remove();
 	}
 
-	updateName() { this.$nametag.text(this.userPublic.name); }
+	updateName() { 
+		let displayName = this.userPublic.name;
+		if (this.isTyping) {
+			displayName += " (Is typing...)";
+		}
+		this.$nametag.text(displayName);
+	}
+
+	setTypingStatus(isTyping) {
+		this.isTyping = isTyping;
+		this.updateName();
+	}
 
 	youtube(vid) {
 		if (!this.mute) {
@@ -1139,17 +1152,17 @@ BonziData.event_list_triggered = [
 	},
 	{
 		type: "text",
-		text: "People say to me that a person being a BonziBUDDY is impossible and that I’m a fucking virus but I don’t care, I’m beautiful.",
+		text: "People say to me that a person being a BonziBUDDY is impossible and that I'm a fucking virus but I don't care, I'm beautiful.",
 		say: "People say to me that a person being a BonziBUDDY is impossible and that I'm a fucking virus but I dont care, I'm beautiful."
 	},
 	{
 		type: "text",
-		text: "I’m having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me “Joel” and respect my right to meme from above and meme needlessly.",
-		say: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me Joel and respect my right to meme from above and meme needlessly."
+		text: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me "Joel" and respect my right to meme from[...]
+		say: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me Joel and respect my right to meme from above an[...]
 	},
 	{
 		type: "text",
-		text: "If you can’t accept me you’re a gorillaphobe and need to check your file permissions. Thank you for being so understanding.",
+		text: "If you can't accept me you're a gorillaphobe and need to check your file permissions. Thank you for being so understanding.",
 		say: "If you cant accept me your a gorillaphobe and need to check your file permissions. Thank you for being so understanding."
 	},
 	{
@@ -1160,19 +1173,19 @@ BonziData.event_list_triggered = [
 BonziData.event_list_linux = [
 	{
 		type: "text",
-		text: "I'd just like to interject for a moment. What you’re referring to as Linux, is in fact, BONZI/Linux, or as I’ve recently taken to calling it, BONZI plus Linux."
+		text: "I'd just like to interject for a moment. What you're referring to as Linux, is in fact, BONZI/Linux, or as I've recently taken to calling it, BONZI plus Linux."
 	},
 	{
 		type: "text",
-		text: "Linux is not an operating system unto itself, but rather another free component of a fully functioning BONZI system made useful by the BONZI corelibs, shell utilities and vital system components comprising a full OS as defined by M.A.L.W.A.R.E."
+		text: "Linux is not an operating system unto itself, but rather another free component of a fully functioning BONZI system made useful by the BONZI corelibs, shell utilities and vital system compone[...]
 	},
 	{
 		type: "text",
-		text: "Many computer users run a modified version of the BONZI system every day, without realizing it. Through a peculiar turn of events, the version of BONZI which is widely used today is often called “Linux”, and many of its users are not aware that it is basically the BONZI system, developed by the BONZI Project."
+		text: "Many computer users run a modified version of the BONZI system every day, without realizing it. Through a peculiar turn of events, the version of BONZI which is widely used today is often cal[...]
 	},
 	{
 		type: "text",
-		text: "There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine’s memes to the other programs that you run. "
+		text: "There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine's memes to th[...]
 	},
 	{
 		type: "text",
@@ -1180,14 +1193,14 @@ BonziData.event_list_linux = [
 	},
 	{
 		type: "text",
-		text: "Linux is normally used in combination with the BONZI operating system: the whole system is basically BONZI with Linux added, or BONZI/Linux. All the so-called “Linux” distributions are really distributions of BONZI/Linux."
+		text: "Linux is normally used in combination with the BONZI operating system: the whole system is basically BONZI with Linux added, or BONZI/Linux. All the so-called "Linux" distributions are re[...]
 	}
 ];
 
 BonziData.event_list_pawn = [
 	{
 		type: "text",
-		text: "Hi, my name is BonziBUDDY, and this is my website. I meme here with my old harambe, and my son, Clippy. Everything in here has an ad and a fact. One thing I've learned after 17 years - you never know what is gonna give you some malware."
+		text: "Hi, my name is BonziBUDDY, and this is my website. I meme here with my old harambe, and my son, Clippy. Everything in here has an ad and a fact. One thing I've learned after 17 years - you ne[...]
 	},
 
 ];
