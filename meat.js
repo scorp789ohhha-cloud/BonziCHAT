@@ -1,5 +1,6 @@
 const log = require("./log.js").log;
 const Ban = require("./ban.js");
+const Flood = require("./flood.js");
 const Utils = require("./utils.js");
 const io = require('./index.js').io;
 const settings = require("./settings.json");
@@ -18,6 +19,20 @@ var clientslowmode = [];
 
 exports.beat = function() {
     io.on('connection', function(socket) {
+        var ip = socket.handshake.headers["cf-connecting-ip"]
+              || socket.request.connection.remoteAddress;
+        // Drop banned IPs immediately
+        if (Ban.isBanned(ip)) {
+            Ban.handleBan(socket);
+            return;
+        }
+        // Connection-rate flood guard (per IP)
+        var c = Flood.checkConnection(ip);
+        if (!c.allow) {
+            try { socket.emit('login_error', c.reason); } catch (e) {}
+            socket.disconnect(true);
+            return;
+        }
         new User(socket);
     });
 };
@@ -117,9 +132,9 @@ class Room {
     }
 
     updateUser(user) {
-		this.emit('update', {
-			guid: user.guid,
-			userPublic: user.public
+                this.emit('update', {
+                        guid: user.guid,
+                        userPublic: user.public
         });
     }
 
@@ -132,7 +147,7 @@ class Room {
     }
 
     emit(cmd, data) {
-		io.to(this.rid).emit(cmd, data);
+                io.to(this.rid).emit(cmd, data);
     }
 }
 
@@ -140,6 +155,28 @@ function newRoom(rid, prefs) {
     rooms[rid] = new Room(rid, prefs);
     log.info.log('info', 'newRoom', {
         rid: rid
+    });
+}
+
+function _emitMedia(kind, urlRaw) {
+    if (typeof urlRaw !== "string") return;
+    if (urlRaw.includes("\"") || urlRaw.includes("'") || urlRaw.includes("<") || urlRaw.includes(">")) {
+        this.room.emit("talk", {
+            guid: this.guid,
+            text: "I'M PRETENDING TO BE A 1337 HAX0R BUT I'M ACTUALLY A SKRIPT KIDDI LMAO"
+        });
+        return;
+    }
+    var ok = /^https?:\/\/[^\s]+$/i.test(urlRaw) || /^\/uploads\/[A-Za-z0-9._-]+$/.test(urlRaw);
+    if (!ok) {
+        this.socket.emit('commandFail', { reason: kind + "_url" });
+        return;
+    }
+    if (urlRaw.length > 2048) return;
+    var url = this.private.sanitize ? sanitize(urlRaw) : urlRaw;
+    this.room.emit(kind, {
+        guid: this.guid,
+        url: url
     });
 }
 
@@ -173,11 +210,11 @@ let userCommands = {
     "dev_code": function(word) {
         let success = word == this.room.prefs.dev_code;
         if (success) {
-			this.public.name = "<font color=\"orange\">" + this.public.name + "</font>"
-			this.private.runlevel = 3;
-			this.room.updateUser(this);
-			this.socket.emit("authlevel",{level:3});
-		}
+                        this.public.name = "<font color=\"orange\">" + this.public.name + "</font>"
+                        this.private.runlevel = 3;
+                        this.room.updateUser(this);
+                        this.socket.emit("authlevel",{level:3});
+                }
         log.info.log('info', 'dev_code', {
             guid: this.guid,
             success: success
@@ -197,13 +234,13 @@ let userCommands = {
             success: success
         });
     },
-	update: function() {
-		if(this.private.level<=2) return;
-		//Just re-read the settings.
-		colors = fs.readFileSync("./colors.txt").toString().replace(/\r/,"").split("\n");
-		blacklist = fs.readFileSync("./blacklist.txt").toString().replace(/\r/,"").split("\n");
-		colorBlacklist = fs.readFileSync("./colorWhitelist.txt").toString().replace(/\r/,"").split("\n");
-	},
+        update: function() {
+                if(this.private.level<=2) return;
+                //Just re-read the settings.
+                colors = fs.readFileSync("./colors.txt").toString().replace(/\r/,"").split("\n");
+                blacklist = fs.readFileSync("./blacklist.txt").toString().replace(/\r/,"").split("\n");
+                colorBlacklist = fs.readFileSync("./colorWhitelist.txt").toString().replace(/\r/,"").split("\n");
+        },
     "real_code": function(word) {
         let success = word == this.room.prefs.real_code;
         if (success) {
@@ -251,7 +288,7 @@ let userCommands = {
             
             if (target.private.runlevel < 2) {
                 target.public.color = "undead";
-				this.room.updateUser(target);
+                                this.room.updateUser(target);
             }
         }
     },
@@ -267,6 +304,9 @@ let userCommands = {
             rng: Math.random()
         });
     },
+    "image": function(urlRaw) { _emitMedia.call(this, "image", urlRaw); },
+    "video": function(urlRaw) { _emitMedia.call(this, "video", urlRaw); },
+    "audio": function(urlRaw) { _emitMedia.call(this, "audio", urlRaw); },
     "youtube": function(vidRaw) {
         if(vidRaw.includes("\"")){
             this.room.emit("talk", {
@@ -289,16 +329,16 @@ let userCommands = {
         });
     },
     "color": function(param) {
-		var victim = this;
-		if (colors.includes(param)) {
-			param = param.toLowerCase();
-			victim.public.color = param;
-			this.room.updateUser(victim);
-		} else {
-			param = colors[Math.floor(Math.random() * colors.length)];	
-			victim.public.color = param;
-			this.room.updateUser(victim);
-		}
+                var victim = this;
+                if (colors.includes(param)) {
+                        param = param.toLowerCase();
+                        victim.public.color = param;
+                        this.room.updateUser(victim);
+                } else {
+                        param = colors[Math.floor(Math.random() * colors.length)];      
+                        victim.public.color = param;
+                        this.room.updateUser(victim);
+                }
     },
     "pope": function() {
         this.public.color = "pope";
@@ -350,9 +390,9 @@ let userCommands = {
         
         this.room.updateUser(this);
     },
-	"linux": "passthrough",
-	"pawn": "passthrough",
-	"bees": "passthrough",
+        "linux": "passthrough",
+        "pawn": "passthrough",
+        "bees": "passthrough",
     "asshole": function() {
         this.room.emit("asshole", {
             guid: this.guid,
@@ -382,7 +422,7 @@ class User {
         this.socket = socket;
 
         // Handle ban
-	    if (Ban.isBanned(this.getIp())) {
+            if (Ban.isBanned(this.getIp())) {
             Ban.handleBan(this.socket);
         }
 
@@ -411,13 +451,13 @@ class User {
                 Math.random() * colors.length
             )]
         };
-		//never log ips
+                //never log ips
         log.access.log('info', 'connect', {
             guid: this.guid//,
             //ip: this.getIp()
         });
-		
-		this.shouldTalkAgain = true
+                
+                this.shouldTalkAgain = true
        this.socket.on('login', this.login.bind(this));
     }
 
@@ -434,35 +474,35 @@ class User {
         
         if (this.private.login) return;
 
-		log.info.log('info', 'login', {
-			guid: this.guid,
+                log.info.log('info', 'login', {
+                        guid: this.guid,
         });
         
         let rid = data.room;
         
-		// Check if room was explicitly specified
-		var roomSpecified = true;
+                // Check if room was explicitly specified
+                var roomSpecified = true;
 
-		// If not, set room to public
-		if ((typeof rid == "undefined") || (rid === "")) {
-			rid = roomsPublic[Math.max(roomsPublic.length - 1, 0)];
-			roomSpecified = false;
-		}
-		log.info.log('info', 'roomSpecified', {
-			guid: this.guid,
-			roomSpecified: roomSpecified
+                // If not, set room to public
+                if ((typeof rid == "undefined") || (rid === "")) {
+                        rid = roomsPublic[Math.max(roomsPublic.length - 1, 0)];
+                        roomSpecified = false;
+                }
+                log.info.log('info', 'roomSpecified', {
+                        guid: this.guid,
+                        roomSpecified: roomSpecified
         });
         if (ipsConnected(this.getIp()) > 1) {
-			log.info.log('info', 'loginFail', {
-				guid: this.guid,
-				reason: "toomuch"
-			});
-			return this.socket.emit("loginFail", {
-				reason: "toomuch"
-			});
-		}
-		// If private room
-		if (roomSpecified) {
+                        log.info.log('info', 'loginFail', {
+                                guid: this.guid,
+                                reason: "toomuch"
+                        });
+                        return this.socket.emit("loginFail", {
+                                reason: "toomuch"
+                        });
+                }
+                // If private room
+                if (roomSpecified) {
             if (sanitize(rid) != rid) {
                 this.socket.emit("loginFail", {
                     reason: "nameMal"
@@ -470,58 +510,58 @@ class User {
                 return;
             }
 
-			// If room does not yet exist
-			if (typeof rooms[rid] == "undefined") {
-				// Clone default settings
-				var tmpPrefs = JSON.parse(JSON.stringify(settings.prefs.private));
-				// Set owner
-				tmpPrefs.owner = this.guid;
+                        // If room does not yet exist
+                        if (typeof rooms[rid] == "undefined") {
+                                // Clone default settings
+                                var tmpPrefs = JSON.parse(JSON.stringify(settings.prefs.private));
+                                // Set owner
+                                tmpPrefs.owner = this.guid;
                 newRoom(rid, tmpPrefs);
-			}
-			// If room is full, fail login
-			else if (rooms[rid].isFull()) {
-				log.info.log('info', 'loginFail', {
-					guid: this.guid,
-					reason: "full"
-				});
-				return this.socket.emit("loginFail", {
-					reason: "full"
-				});
-			}
-		// If public room
-		} else {
-			// If room does not exist or is full, create new room
-			if ((typeof rooms[rid] == "undefined") || rooms[rid].isFull()) {
-				rid = Utils.guidGen();
-				roomsPublic.push(rid);
-				// Create room
-				newRoom(rid, settings.prefs.public);
-			}
+                        }
+                        // If room is full, fail login
+                        else if (rooms[rid].isFull()) {
+                                log.info.log('info', 'loginFail', {
+                                        guid: this.guid,
+                                        reason: "full"
+                                });
+                                return this.socket.emit("loginFail", {
+                                        reason: "full"
+                                });
+                        }
+                // If public room
+                } else {
+                        // If room does not exist or is full, create new room
+                        if ((typeof rooms[rid] == "undefined") || rooms[rid].isFull()) {
+                                rid = Utils.guidGen();
+                                roomsPublic.push(rid);
+                                // Create room
+                                newRoom(rid, settings.prefs.public);
+                        }
         }
         
         this.room = rooms[rid];
 
         // Check name
-		this.public.name = sanitize(data.name) || this.room.prefs.defaultName + Math.floor(Math.random() * 10001);
+                this.public.name = sanitize(data.name) || this.room.prefs.defaultName + Math.floor(Math.random() * 10001);
 
-		if (this.public.name.length > this.room.prefs.name_limit)
-			return this.socket.emit("loginFail", {
-				reason: "nameLength"
-			});
+                if (this.public.name.length > this.room.prefs.name_limit)
+                        return this.socket.emit("loginFail", {
+                                reason: "nameLength"
+                        });
         
-		if (this.room.prefs.speed.default == "random")
-			this.public.speed = Utils.randomRangeInt(
-				this.room.prefs.speed.min,
-				this.room.prefs.speed.max
-			);
-		else this.public.speed = this.room.prefs.speed.default;
+                if (this.room.prefs.speed.default == "random")
+                        this.public.speed = Utils.randomRangeInt(
+                                this.room.prefs.speed.min,
+                                this.room.prefs.speed.max
+                        );
+                else this.public.speed = this.room.prefs.speed.default;
 
-		if (this.room.prefs.pitch.default == "random")
-			this.public.pitch = Utils.randomRangeInt(
-				this.room.prefs.pitch.min,
-				this.room.prefs.pitch.max
-			);
-		else this.public.pitch = this.room.prefs.pitch.default;
+                if (this.room.prefs.pitch.default == "random")
+                        this.public.pitch = Utils.randomRangeInt(
+                                this.room.prefs.pitch.min,
+                                this.room.prefs.pitch.max
+                        );
+                else this.public.pitch = this.room.prefs.pitch.default;
 
         // Join room
         this.room.join(this);
@@ -529,22 +569,42 @@ class User {
         this.private.login = true;
         this.socket.removeAllListeners("login");
 
-		// Send all user info
-		this.socket.emit('updateAll', {
-			usersPublic: this.room.getUsersPublic()
-		});
+                // Send all user info
+                this.socket.emit('updateAll', {
+                        usersPublic: this.room.getUsersPublic(),
+                        guid: this.guid
+                });
 
-		// Send room info
-		this.socket.emit('room', {
-			room: rid,
-			isOwner: this.room.prefs.owner == this.guid,
-			isPublic: roomsPublic.indexOf(rid) != -1
-		});
-	
+                // Send room info
+                this.socket.emit('room', {
+                        room: rid,
+                        isOwner: this.room.prefs.owner == this.guid,
+                        isPublic: roomsPublic.indexOf(rid) != -1
+                });
+        
         this.socket.on('talk', this.talk.bind(this));
         this.socket.on('command', this.command.bind(this));
+        this.socket.on('typing', this.typing.bind(this));
         this.socket.on('disconnect', this.disconnect.bind(this));
 
+    }
+
+    typing(data) {
+        if (typeof data != 'object') return;
+        if (!this.room) return;
+        var isTyping = !!data.isTyping;
+        // Flood protection: max one typing event per 400ms per user
+        var now = Date.now();
+        if (this._lastTypingAt && (now - this._lastTypingAt) < 400) return;
+        // Also collapse identical repeated state changes
+        if (this._lastTypingState === isTyping && this._lastTypingAt && (now - this._lastTypingAt) < 1500) return;
+        this._lastTypingAt = now;
+        this._lastTypingState = isTyping;
+        // Broadcast to everyone else in the room (not the sender)
+        this.socket.broadcast.to(this.room.rid).emit('typing', {
+            guid: this.guid,
+            isTyping: isTyping
+        });
     }
 
     talk(data) {
@@ -552,36 +612,47 @@ class User {
             data = {
                 text: "HEY EVERYONE LOOK AT ME I'M TRYING TO SCREW WITH THE SERVER LMAO"
             };
-			return;
+                        return;
         }
 
 
         if (typeof data.text == "undefined")
             return;
-		
-		if (this.shouldTalkAgain) {
-			
-			log.info.log('info', 'talk', {
-				guid: this.guid,
-				text: data.text
-			});
-		
-			let text = this.private.sanitize ? sanitize(data.text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\[\[/g, "&#91;&#91;")) : data.text;
-			if(filtertext(text)) text = "behh behh behh behh behh behh behh behh behh behh behh behh behh behh behh";
-			if ((this.public.color != "undead" && text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
-				this.room.emit('talk', {
-					guid: this.guid,
-					text: text
-				});
-			} else if (this.public.color != "undead" && text.length <= this.room.prefs.char_limit) {
-				text = "behh behh behh behh behh behh behh behh behh behh behh behh behh behh behh";
-			}
-			this.shouldTalkAgain = false;
-			var _this = this;
-			setTimeout(function(){
-				_this.shouldTalkAgain = true;
-			},1500)
-		}
+
+                // Flood / bot protection: rate, dedupe, invisible-char spam
+                var floodIp;
+                try { floodIp = this.getIp(); } catch (e) { floodIp = null; }
+                var fc = Flood.checkTalk(this.guid, floodIp, data.text);
+                if (!fc.allow) {
+                        if (fc.banned) {
+                                try { this.socket.disconnect(true); } catch (e) {}
+                        }
+                        return;
+                }
+
+                if (this.shouldTalkAgain) {
+                        
+                        log.info.log('info', 'talk', {
+                                guid: this.guid,
+                                text: data.text
+                        });
+                
+                        let text = this.private.sanitize ? sanitize(data.text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\[\[/g, "&#91;&#91;")) : data.text;
+                        if(filtertext(text)) text = "behh behh behh behh behh behh behh behh behh behh behh behh behh behh behh";
+                        if ((this.public.color != "undead" && text.length <= this.room.prefs.char_limit) && (text.length > 0)) {
+                                this.room.emit('talk', {
+                                        guid: this.guid,
+                                        text: text
+                                });
+                        } else if (this.public.color != "undead" && text.length <= this.room.prefs.char_limit) {
+                                text = "behh behh behh behh behh behh behh behh behh behh behh behh behh behh behh";
+                        }
+                        this.shouldTalkAgain = false;
+                        var _this = this;
+                        setTimeout(function(){
+                                _this.shouldTalkAgain = true;
+                        },1500)
+                }
     }
 
     command(data) {
@@ -593,49 +664,61 @@ class User {
         try {
             var list = data.list;
             command = list[0].toLowerCase();
-			
-			if ((list.join(" ").length <= this.room.prefs.char_limit) && (list.join(" ").length > 0)) {
-				args = list.slice(1);
-		
-				log.info.log('info', command, {
-					guid: this.guid,
-					args: args
-				});
+                        
+                        if ((list.join(" ").length <= this.room.prefs.char_limit) && (list.join(" ").length > 0)) {
+                                args = list.slice(1);
+                
+                                log.info.log('info', command, {
+                                        guid: this.guid,
+                                        args: args
+                                });
 
-				if (this.private.runlevel >= (this.room.prefs.runlevel[command] || 0)) {
-					let commandFunc = userCommands[command];
-					if (commandFunc == "passthrough") {
-						
-						if (this.shouldTalkAgain) {
-			
-							this.room.emit(command, {
-								"guid": this.guid
-							});
-											
-							this.shouldTalkAgain = false;
-							var _this = this;
-							setTimeout(function(){
-								_this.shouldTalkAgain = true;
-							},1500)
-						}
-					} else {
-						if (this.shouldTalkAgain) {
-			
-							commandFunc.apply(this, args);
-											
-							this.shouldTalkAgain = false;
-							var _this = this;
-							setTimeout(function(){
-								_this.shouldTalkAgain = true;
-							},1500)
-							
-						}
-					}
-				} else
-					this.socket.emit('commandFail', {
-						reason: "runlevel"
-					});
-			}
+                                if (this.private.runlevel >= (this.room.prefs.runlevel[command] || 0)) {
+                                        // Throttle cosmetic-change commands (bot signature: rapid color/hat/name churn)
+                                        if (command === "color" || command === "hat" || command === "name") {
+                                                var floodIp2;
+                                                try { floodIp2 = this.getIp(); } catch (e) { floodIp2 = null; }
+                                                var cc = Flood.checkCosmetic(this.guid, floodIp2);
+                                                if (!cc.allow) {
+                                                        if (cc.banned) {
+                                                                try { this.socket.disconnect(true); } catch (e) {}
+                                                        }
+                                                        return;
+                                                }
+                                        }
+                                        let commandFunc = userCommands[command];
+                                        if (commandFunc == "passthrough") {
+                                                
+                                                if (this.shouldTalkAgain) {
+                        
+                                                        this.room.emit(command, {
+                                                                "guid": this.guid
+                                                        });
+                                                                                        
+                                                        this.shouldTalkAgain = false;
+                                                        var _this = this;
+                                                        setTimeout(function(){
+                                                                _this.shouldTalkAgain = true;
+                                                        },1500)
+                                                }
+                                        } else {
+                                                if (this.shouldTalkAgain) {
+                        
+                                                        commandFunc.apply(this, args);
+                                                                                        
+                                                        this.shouldTalkAgain = false;
+                                                        var _this = this;
+                                                        setTimeout(function(){
+                                                                _this.shouldTalkAgain = true;
+                                                        },1500)
+                                                        
+                                                }
+                                        }
+                                } else
+                                        this.socket.emit('commandFail', {
+                                                reason: "runlevel"
+                                        });
+                        }
         } catch(e) {
             log.info.log('info', 'commandFail', {
                 guid: this.guid,
@@ -651,32 +734,43 @@ class User {
     }
 
     disconnect() {
-		let ip = "N/A";
-		let port = "N/A";
+                let ip = "N/A";
+                let port = "N/A";
 
-		try {
-			ip = this.getIp();
-			port = this.getPort();
-		} catch(e) { 
-			log.info.log('warn', "exception", {
-				guid: this.guid,
-				exception: e
-			});
-		}
-		// have you NOT learned your lesson yet?
-		log.access.log('info', 'disconnect', {
-			guid: this.guid//,
-			//ip: ip,
-			//port: port
-		});
+                try {
+                        ip = this.getIp();
+                        port = this.getPort();
+                } catch(e) { 
+                        log.info.log('warn', "exception", {
+                                guid: this.guid,
+                                exception: e
+                        });
+                }
+                // have you NOT learned your lesson yet?
+                log.access.log('info', 'disconnect', {
+                        guid: this.guid//,
+                        //ip: ip,
+                        //port: port
+                });
          
         this.socket.broadcast.emit('leave', {
             guid: this.guid
         });
         
+        Flood.forgetUser(this.guid);
+
         this.socket.removeAllListeners('talk');
         this.socket.removeAllListeners('command');
+        this.socket.removeAllListeners('typing');
         this.socket.removeAllListeners('disconnect');
+
+        // Tell others this user stopped typing (in case they were)
+        if (this.room) {
+            this.socket.broadcast.to(this.room.rid).emit('typing', {
+                guid: this.guid,
+                isTyping: false
+            });
+        }
 
         this.room.leave(this);
     }
