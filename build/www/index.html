@@ -32,121 +32,125 @@
 <body>
 
 <div id="content">
-	<div id="room_info">
-		get the fuck out of here
-		<p hidden>Room ID - <span class="room_id">???</span><br/></p>
-	</div>
+        <div id="room_info">
+                get the fuck out of here
+                <p hidden>Room ID - <span class="room_id">???</span><br/></p>
+        </div>
 
-	<canvas id="bonzi_canvas" width="100" height="100"></canvas>
+        <canvas id="bonzi_canvas" width="100" height="100"></canvas>
 
-	<div id="page_login" class="page">
-		<div id="login_apps" class="app_showcase" style="display: none;"></div>
-		<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
-			<tr valign="top" align="center">
-				<td></td>
-				<td align="center" valign="middle">
-					<table border="0" cellpadding="0" cellspacing="0" width="100%">
-						<tr>
-							<td><img src="./img/logon/portal_leaves_small1.gif" height="55"/></td>
-							<td nowrap width="100%" height="100%" style="background-image: url('./img/logon/portal_leaves_small2.gif'); background-repeat: repeat-x;"></td>
-						</tr>
-					</table>
-					<table>
-						<div id="login_card" style="display: block;">
-							<input id="login_name" type="text" placeholder="Name"/>
-							<input id="login_room" type="text" placeholder="Room (optional)"/>
-							<div id="login_go"><button>go</button></div>
-							<div id="login_error" style="display: none;"></div>
-							<br>
-							<h6>For everyone that doesn't know:<br>The war between me and Fune ended.<br>I am making sure I won't do stupid crap again.<br>Also he admitted that the grooming kids thing was faked.</h6>
-							<br>
-							Make sure you read the <a href="readme.html">README</a> (BonziCHAT Guide) before use.
-							<br>
-							By visiting this website you agree to the <a id="terms" href="terms.html" style="color: #ff0000; text-decoration: none;">Terms of Use</a>. Version 0.4
-							<hr>
-							<a href="credits.html">Credits</a>
-							<a href="https://discord.gg/KJvgUTpf">ScorpCord</a>
-							<a href="mash.html">MASH HTML5 (Alpha)</a>
-						</div>
-					</table>
-				</td>
-				<td></td>
-			</tr>
-		</table>
-	</div>
+        <div id="page_login" class="page">
+                <div id="login_apps" class="app_showcase" style="display: none;"></div>
+                <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tr valign="top" align="center">
+                                <td></td>
+                                <td align="center" valign="middle">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                <tr>
+                                                        <td><img src="./img/logon/portal_leaves_small1.gif" height="55"/></td>
+                                                        <td nowrap width="100%" height="100%" style="background-image: url('./img/logon/portal_leaves_small2.gif'); background-repeat: repeat-x;"></td>
+                                                </tr>
+                                        </table>
+                                        <table>
+                                                <div id="login_card" style="display: block;">
+                                                        <input id="login_name" type="text" placeholder="Name"/>
+                                                        <input id="login_room" type="text" placeholder="Room (optional)"/>
+                                                        <div id="login_go"><button>go</button></div>
+                                                        <div id="login_error" style="display: none;"></div>
+                                                        <br>
+                                                        <h6>To BonziWORLD: Try hack our server again we consider you. Dumbass</h6>
+                                                        <br>
+                                                        Make sure you read the <a href="readme.html">README</a> (BonziCHAT Guide) before use.
+                                                        <br>
+                                                        By visiting this website you agree to the <a id="terms" href="terms.html" style="color: #ff0000; text-decoration: none;">Terms of Use</a>. Version 0.4
+                                                        <hr>
+                                                        <a href="credits.html">Credits</a>
+                                                        <a href="https://discord.gg/KJvgUTpf">ScorpCord</a>
+                                                        <a href="mash.html">MASH HTML5 (Alpha)</a>
+                                                </div>
+                                        </table>
+                                </td>
+                                <td></td>
+                        </tr>
+                </table>
+        </div>
 
-	<div id="page_error" class="page" style="display: none;">
-		<div id="error_cont" class="message_cont">
-			A crash has occurred. Please try reloading the page.
-		</div>
-	</div>
+        <div id="page_error" class="page" style="display: none;">
+                <div id="error_cont" class="message_cont">
+                        A crash has occurred. Please try reloading the page.
+                </div>
+        </div>
 
-	<div id="page_ban" class="page" style="display: none;">
-		<div id="ban_cont" class="message_cont">
-			<br/>
-			<h1>You have been banned from BonziCHAT</h1>
-			<br/><br/>
-			<b>Reason: </b><span id="ban_reason"></span><br/>
-			<b>Deadline: </b><span id="ban_end"></span><br/>
-		</div>
-	</div>
+        <div id="page_ban" class="page" style="display: none;">
+                <div id="ban_cont" class="message_cont">
+                        <br/>
+                        <h1>You have been banned from BonziCHAT</h1>
+                        <br/><br/>
+                        <b>Reason: </b><span id="ban_reason"></span><br/>
+                        <b>Deadline: </b><span id="ban_end"></span><br/>
+                </div>
+        </div>
 
-	<div id="page_kick" class="page" style="display: none;">
-		<div id="kick_cont" class="message_cont">
-			<br/>
-			<h1>You have been kicked from BonziCHAT</h1>
-			<br/><br/>
-			<b>Reason: </b><span id="kick_reason"></span><br/>
-		</div>
-	</div>
+        <div id="page_kick" class="page" style="display: none;">
+                <div id="kick_cont" class="message_cont">
+                        <br/>
+                        <h1>You have been kicked from BonziCHAT</h1>
+                        <br/><br/>
+                        <b>Reason: </b><span id="kick_reason"></span><br/>
+                </div>
+        </div>
 
-	<div class="xp_window" id="bonzi_speak_window" style="display:none">
-		<div class="xp_window_bar">
-			<div class="xp_window_close"></div>
-			<div class="xp_window_icon"></div>
-			<div class="xp_window_text">Speak Bonzi, Speak!</div>
-		</div>
-		<div class="bonzi_speak_button" id="bonzi_speak_say">Say it!</div>
-		<div class="bonzi_speak_button xp_window_cancel" id="bonzi_speak_cancel">Cancel</div>
-		<textarea id="bonzi_speak_text"></textarea>
-	</div>
+        <div class="xp_window" id="bonzi_speak_window" style="display:none">
+                <div class="xp_window_bar">
+                        <div class="xp_window_close"></div>
+                        <div class="xp_window_icon"></div>
+                        <div class="xp_window_text">Speak Bonzi, Speak!</div>
+                </div>
+                <div class="bonzi_speak_button" id="bonzi_speak_say">Say it!</div>
+                <div class="bonzi_speak_button xp_window_cancel" id="bonzi_speak_cancel">Cancel</div>
+                <textarea id="bonzi_speak_text"></textarea>
+        </div>
 
-	<div class="xp_window" id="bonzi_chat_window" style="display:none">
-		<div class="xp_window_bar">
-			<div class="xp_window_icon"></div>
-			<div class="xp_window_text">BonziCHAT</div>
-		</div>
-		<div class="bonzi_chat_button" id="bonzi_chat_say"></div>
-		<div id="bonzi_chat_messages"></div>
-		<div id="bonzi_chat_online"></div>
-		<div id="bonzi_chat_typing" style="font-style:italic;color:#333;font-size:12px;padding:3px 6px;min-height:18px;background:#f0f0f0;border-top:1px solid #ccc;display:none;"></div>
-		<input id="bonzi_chat_text" type="text" placeholder="To chat click here. Chat '/?' or '/help' for help."/>
-	</div>
+        <div class="xp_window" id="bonzi_chat_window" style="display:none">
+                <div class="xp_window_bar">
+                        <div class="xp_window_icon"></div>
+                        <div class="xp_window_text">BonziCHAT</div>
+                </div>
+                <div class="bonzi_chat_button" id="bonzi_chat_say"></div>
+                <div id="bonzi_chat_messages" style="bottom:147px;height:161px;"></div>
+                <div id="bonzi_chat_online"></div>
+                <div id="bonzi_chat_typing" style="position:absolute;left:18px;width:395px;bottom:127px;height:20px;font-style:italic;color:#333;font-size:12px;padding:1px 6px;box-sizing:border-box;background:transparent;display:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:18px;"></div>
+                <input id="bonzi_chat_text" type="text" placeholder="To chat click here. Chat '/?' or '/help' for help." style="width:290px;"/>
+                <input type="file" id="bonzi_chat_file" accept=".png,.jpg,.jpeg,.gif,.webp,.bmp,.mp3,.wav,.ogg,.m4a,.mp4,.webm,.mov,image/*,audio/*,video/*" style="display:none;"/>
+                <button type="button" id="bonzi_chat_clip" title="Upload file (image / audio / video)" style="position:absolute;left:310px;bottom:58px;width:28px;height:28px;cursor:pointer;background:transparent;border:0;outline:none;box-shadow:none;padding:0;margin:0;display:flex;align-items:center;justify-content:center;line-height:1;-webkit-appearance:none;appearance:none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:block;"><path fill="#000" d="M16.5 6.5v11a4.5 4.5 0 11-9 0V5.5a3 3 0 116 0v11.25a1.5 1.5 0 11-3 0V7H9v9.75a3 3 0 006 0V5.5a4.5 4.5 0 10-9 0V17.5a6 6 0 0012 0V6.5z"/></svg>
+                </button>
+        </div>
 
-	<div id="bonzi_cont" class="bonzi">
-		<canvas id="canvas" class="canvas_bonzi"></canvas>
-		<p class="bubble_xp" id="bonzi_xp_bubble" style="display:none"></p>
-	</div>
+        <div id="bonzi_cont" class="bonzi">
+                <canvas id="canvas" class="canvas_bonzi"></canvas>
+                <p class="bubble_xp" id="bonzi_xp_bubble" style="display:none"></p>
+        </div>
 
-	<div id="bonzi_xp_menu" class="xp_menu xp_menu_root">
-		<div class="xp_menu_list">
-			<div id="bonzi_speak">Speak</div>
-			<div id="bonzi_joke">Tell a Joke</div>
-			<div id="bonzi_fact">Tell an Amazing Fact</div>
-			<div id="bonzi_sing">Sing a Song</div>
-			<div id="bonzi_personality">Personality Settings</div>
-			<div onclick="window.open('outlookcal://')">Calendar</div>
-			<div id="xp_menu_animate">Animate!</div>
-			<div id="xp_menu_hide">Hide</div>
-		</div>
-	</div>
+        <div id="bonzi_xp_menu" class="xp_menu xp_menu_root">
+                <div class="xp_menu_list">
+                        <div id="bonzi_speak">Speak</div>
+                        <div id="bonzi_joke">Tell a Joke</div>
+                        <div id="bonzi_fact">Tell an Amazing Fact</div>
+                        <div id="bonzi_sing">Sing a Song</div>
+                        <div id="bonzi_personality">Personality Settings</div>
+                        <div onclick="window.open('outlookcal://')">Calendar</div>
+                        <div id="xp_menu_animate">Animate!</div>
+                        <div id="xp_menu_hide">Hide</div>
+                </div>
+        </div>
 
 </div>
 
 <div id="titlebar">
-	<div id="minimize"></div>
-	<div id="maximize"></div>
-	<div id="close"></div>
+        <div id="minimize"></div>
+        <div id="maximize"></div>
+        <div id="close"></div>
 </div>
 
 </body>
