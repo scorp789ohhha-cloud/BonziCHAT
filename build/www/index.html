@@ -1,220 +1,153 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>BonziCHAT</title>
-	 <!--This site gives credits to KKK FAN FOR LEAKING THE SRC CODE.. AND SNOWMAN! :3 This grants them that they are trusted by them both.-->
-	 								<!--DON'T REMOVE DEH CREDZ!-->
-        <meta charset="utf-8" />
-        <meta content="" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="stylesheet" type="text/css" href="./css/legacy.min.css" />
-        <link rel="stylesheet" type="text/css" href="./css/bonzi.css" />
-        <link rel="apple-touch-icon" sizes="180x180" href="./favicons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" href="./favicons/favicon-32x32.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="./favicons/favicon-16x16.png" sizes="16x16" />
-        <link rel="manifest" href="./favicons/manifest.json" />
-        <link rel="mask-icon" href="./favicons/safari-pinned-tab.svg" color="#5bbad5" />
-        <link rel="shortcut icon" href="./favicons/favicon.ico" />
-        <meta name="msapplication-config" content="./favicons/browserconfig.xml" />
-        <meta name="theme-color" content="#ffffff" />
-        <script src="./js/lib/easeljs.min.js"></script>
-        <script src="./js/lib/preloadjs-0.6.2.min.js"></script>
-        <script src="./js/lib/jquery.min.js"></script>
-        <script src="./js/lib/seedrandom.min.js"></script>
-        <script src="./js/lib/socket.io-1.4.5.js"></script>
-        <script src="./js/lib/speakjs/speakClient.js"></script>
-        <script src="./js/lib/jquery.contextMenu.min.js"></script>
-        <script src="./cordova.js"></script>
-        <script src="./js/platform.js"></script>
-        <link rel="stylesheet" type="text/css" href="./css/platform.css" />
-        <script src="./js/script.min.legacy.js"></script>
-        <script src="./js/bonzi.js"></script>
-    </head>
-    <body>
-        <div id="content">
-            <div id="room_info">
-                Room ID - <span class="room_id">???</span><br />
-            </div>
-            <canvas id="bonzi_canvas" width="100" height="100"></canvas>
-            <table id="chat_bar">
-				<tr>
-					<td id="chat_send">send</td>
-					<td id="chat_message_cont"><input id="chat_message" type="text" placeholder="Say something!" /></td>
-					<td id="chat_tray"><div id="btn_tile" class="tray_btn"></div></td>
-				</tr>
-			</table>
+<head>
+<title>NEW! - BonziCHAT</title>
+<meta charset="utf-8"/>
+<meta content=""/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<link rel="stylesheet" type="text/css" href="./css/style.min.css"/>
+<link rel="stylesheet" type="text/css" href="./css/bonzi.css"/>
+<link rel="apple-touch-icon" sizes="180x180" href="./favicons/apple-touch-icon.png"/>
+<link rel="icon" type="image/png" href="./favicons/favicon-32x32.png" sizes="32x32"/>
+<link rel="icon" type="image/png" href="./favicons/favicon-16x16.png" sizes="16x16"/>
+<link rel="manifest" href="./favicons/manifest.json"/>
+<link rel="mask-icon" href="./favicons/safari-pinned-tab.svg" color="#5bbad5"/>
+<link rel="shortcut icon" href="./favicons/favicon.ico"/>
+<meta name="msapplication-config" content="./favicons/browserconfig.xml"/>
+<meta name="theme-color" content="#ffffff"/>
+<script src="./js/lib/easeljs.min.js"></script>
+<script src="./js/lib/preloadjs-0.6.2.min.js"></script>
+<script src="./js/lib/jquery.min.js"></script>
+<script src="./js/lib/seedrandom.min.js"></script>
+<script src="./js/lib/socket.io-1.4.5.js"></script>
+<script src="./js/lib/speakjs/speakClient.js"></script>
+<script src="./js/lib/jquery.contextMenu.min.js"></script>
+<script src="./cordova.js"></script>
+<script src="./js/platform.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/platform.css"/>
+<script src="./js/script.min.js"></script>
+<script src="./js/bonzi.js"></script>
+</head>
+<body>
 
-            <div id="page_login" class="page">
-				<div id="login_apps" class="app_showcase" style="display: none;"></div>
+<div id="content">
+	<div id="room_info">
+		get the fuck out of here
+		<p hidden>Room ID - <span class="room_id">???</span><br/></p>
+	</div>
 
-					<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
-						<tr valign="top" align="center">
-							<td>
-								<!--HEADER-->
-								<td align="center" valign="middle">
-									<table border="0" cellpadding="0" cellspacing="0" width="100%">
-										<tr>
-											<td><img src="https://web.archive.org/web/20030401085816im_/http://images.bonzi.com/images/portal_leaves_small1.gif" height="55" /></td>
-											<td nowrap="" width="100%" height="100%" background="" style="background-image: url('https://web.archive.org/web/20030401085816im_/http://images.bonzi.com/images/portal_leaves_small2.gif'); background-repeat: repeat-x;"></td>
-										</tr>
-									</table>
-									<table>
-											<div id="login_card" style="display: block;">
-												<input id="login_name" type="text" placeholder="Name" /> <input id="login_room" type="text" placeholder="Room (optional)" />
-												<div id="login_go"><button>Go</button></div>
-												<div id="login_error" style="display: none;"></div>
-												<br>
-												Make sure you read the <a href="readme.html">README</a> (BonziCHAT Guide) before use.
-												<br>
-												You don't belong here <a id="terms" href="terms.html" style="color: #ff0000; text-decoration: none;">Terms of Use</a>. Version 0.1.4 <a href="javascript:newupdate()">whats new?</a> <br>Leaked source code by kkk fan</br>
-												<hr>
+	<canvas id="bonzi_canvas" width="100" height="100"></canvas>
 
-												<a href="credits.html">Credits</a>
-												<a href="mash.html">MASH HTML5 (Alpha)</a>
-											</div>
-									</table>
-								</td>
-								<!--/HEADER-->
-								<!--NAVBAR-->
-							</td>
+	<div id="page_login" class="page">
+		<div id="login_apps" class="app_showcase" style="display: none;"></div>
+		<table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr valign="top" align="center">
+				<td></td>
+				<td align="center" valign="middle">
+					<table border="0" cellpadding="0" cellspacing="0" width="100%">
+						<tr>
+							<td><img src="./img/logon/portal_leaves_small1.gif" height="55"/></td>
+							<td nowrap width="100%" height="100%" style="background-image: url('./img/logon/portal_leaves_small2.gif'); background-repeat: repeat-x;"></td>
 						</tr>
 					</table>
-				</tr>
-			</div>
-
-            </div>
-            <div id="page_error" class="page" style="display: none;">
-                <div id="error_cont" class="message_cont">
-                    An crash has occurred. Please try reloading the page.
-                </div>
-            </div>
-            <div id="page_ban" class="page" style="display: none;">
-                <div id="ban_cont" class="message_cont">
-                    <br />
-                    <h1>You have been banned from BonziCHAT</h1>
-                    <br />
-                    <br />
-                    <b>Reason: </b><span id="ban_reason"></span><br />
-                    <b>Deadline: </b><span id="ban_end"></span><br />
-                </div>
-            </div>
-            <div id="page_kick" class="page" style="display: none;">
-                <div id="kick_cont" class="message_cont">
-                    <br />
-                    <h1>You have been kicked from BonziCHAT</h1>
-                    <br />
-                    <br />
-                    <b>Reason: </b><span id="ban_reason"></span><br />
-                </div>
-            </div>
-
-			<div class="xp_window" id="bonzi_speak_window" style="display:none">
-				<div class="xp_window_bar">
-					<div class="xp_window_close"></div>
-					<div class="xp_window_icon"></div>
-					<div class="xp_window_text">Speak Bonzi, Speak!</div>
-				</div>
-				<div class="bonzi_speak_button" id="bonzi_speak_say">Say it!</div>
-				<div class="bonzi_speak_button xp_window_cancel" id="bonzi_speak_cancel">Cancel</div>
-				<textarea id="bonzi_speak_text"></textarea>
-			</div>
-
-
-			<div class="xp_window" id="bonzi_chat_window" style="display:none">
-				<div class="xp_window_bar">
-					<div class="xp_window_close"></div>
-					<div class="xp_window_icon"></div>
-					<div class="xp_window_text">BonziCHAT</div>
-				</div>
-				<div class="bonzi_chat_button" id="bonzi_chat_say"></div>
-				<textarea id="bonzi_chat_text"></textarea>
-			</div>
-
-
-			<div id="bonzi_cont" class="bonzi">
-				<canvas id="canvas" class="canvas_bonzi"></canvas>
-				<p class="bubble_xp" id="bonzi_xp_bubble" style="display:none"></p>
-			</div>
-
-			<div id="bonzi_xp_menu" class="xp_menu xp_menu_root">
-				<div class="xp_menu_list">
-
-					<!-- <div>My Home</div>
-					<div>Search</div>
-					<div>Browse</div>
-					<div class="xp_menu_divider"><div></div></div>
-					<div>Gold Member Access...</div>
-					<div class="xp_menu_divider"><div></div></div>
-					<div>Open Voice Commands Window</div>-->
-					<div id="bonzi_speak">Speak</div>
-					<div id="bonzi_joke">Tell a Joke</div>
-					<div id="bonzi_fact">Tell an Amazing Fact</div>
-					<div id="bonzi_sing">Sing a Song</div>
-					<div id="bonzi_personality">Personality Settings</div>
-					<div onclick="window.open('outlookcal://')">Calendar</div>
-					<!-- <div class="xp_menu_option_submenu">
-						Play Games <div class="xp_menu_arrow"></div>
-						<div class="xp_menu xp_submenu">
-							<div class="xp_menu_list">
-								<div>Online Games</div>
-								<div class="xp_menu_divider"><div></div></div>
-								<div>Bonzi's Beach Checkers</div>
-								<div>Bonzi's Jungle Jigsaw</div>
-								<div>Bonzi's Solitaire</div>
-							</div>
+					<table>
+						<div id="login_card" style="display: block;">
+							<input id="login_name" type="text" placeholder="Name"/>
+							<input id="login_room" type="text" placeholder="Room (optional)"/>
+							<div id="login_go"><button>go</button></div>
+							<div id="login_error" style="display: none;"></div>
+							<br>
+							<h6>For everyone that doesn't know:<br>The war between me and Fune ended.<br>I am making sure I won't do stupid crap again.<br>Also he admitted that the grooming kids thing was faked.</h6>
+							<br>
+							Make sure you read the <a href="readme.html">README</a> (BonziCHAT Guide) before use.
+							<br>
+							By visiting this website you agree to the <a id="terms" href="terms.html" style="color: #ff0000; text-decoration: none;">Terms of Use</a>. Version 0.4
+							<hr>
+							<a href="credits.html">Credits</a>
+							<a href="https://discord.gg/BuubsMY7">The Cord</a>
+							<a href="mash.html">MASH HTML5 (Alpha)</a>
+							<a id="legacy" href="legacy.html">Old Version (for BW enjoyers, deprecated)</a>
 						</div>
-					</div>
-					<div class="xp_menu_option_submenu">
-						Read Stories <div class="xp_menu_arrow"></div>
-						<div class="xp_menu xp_submenu">
-							<div class="xp_menu_list">
-								<div onclick="window.open('https://web.archive.org/web/20220516223341/https://www.youtube.com/user/alpharadd','_blank')">Bonzi and the Alpha-net!</div>
-								<div>Bonzi and the Internet!</div>
-								<div>Bonzi and the Polizoof!</div>
-								<div>Bonzi and the Treasure Chest!</div>
-							</div>
-						</div>
-					</div>
-					<div class="xp_menu_divider"><div></div></div>
-					<div class="xp_menu_option_submenu" onclick="window.open('outlookmail://')">
-						BonziBUDDY E-Mail <div class="xp_menu_arrow"></div>
-						<div class="xp_menu xp_submenu">
-							<div class="xp_menu_list">
-								<div onclick="window.open('outlookmail://')">New Message...</div>
-								<div onclick="window.open('outlookmail://')">Check for E-Mail...</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="xp_menu_divider"><div></div></div>
-					<div>Share Me With Friends</div>
-					<div>Update Me</div>
-					<div class="xp_menu_option_submenu" onclick="window.open('ms-settings://')">
-						My Options <div class="xp_menu_arrow"></div>
-						<div class="xp_menu xp_submenu">
-							<div class="xp_menu_list">
-								<div onclick="window.open('ms-settings://')">Settings</div>
-								<div id="bonzi_personality">Personality</div>
-								<div>Salutation</div>
-								<div class="xp_menu_divider"><div></div></div>
-								<div>Support</div>
-								<div>Online Registration...</div>
-							</div>
-						</div>
-					</div>
-					<div class="xp_menu_divider"><div></div></div>
-					<div>Quiet Mode - F9</div>
-					<div onclick="window.close()">Goodbye</div>-->
-					<div id="xp_menu_animate">Animate!</div>
-					<div id="xp_menu_hide">Hide</div>
-				</div>
-			</div>
-        </div>
-        <div id="titlebar">
-            <div id="minimize"></div>
-            <div id="maximize"></div>
-            <div id="close"></div>
-        </div>
-    </body>
+					</table>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="page_error" class="page" style="display: none;">
+		<div id="error_cont" class="message_cont">
+			A crash has occurred. Please try reloading the page.
+		</div>
+	</div>
+
+	<div id="page_ban" class="page" style="display: none;">
+		<div id="ban_cont" class="message_cont">
+			<br/>
+			<h1>You have been banned from BonziCHAT</h1>
+			<br/><br/>
+			<b>Reason: </b><span id="ban_reason"></span><br/>
+			<b>Deadline: </b><span id="ban_end"></span><br/>
+		</div>
+	</div>
+
+	<div id="page_kick" class="page" style="display: none;">
+		<div id="kick_cont" class="message_cont">
+			<br/>
+			<h1>You have been kicked from BonziCHAT</h1>
+			<br/><br/>
+			<b>Reason: </b><span id="kick_reason"></span><br/>
+		</div>
+	</div>
+
+	<div class="xp_window" id="bonzi_speak_window" style="display:none">
+		<div class="xp_window_bar">
+			<div class="xp_window_close"></div>
+			<div class="xp_window_icon"></div>
+			<div class="xp_window_text">Speak Bonzi, Speak!</div>
+		</div>
+		<div class="bonzi_speak_button" id="bonzi_speak_say">Say it!</div>
+		<div class="bonzi_speak_button xp_window_cancel" id="bonzi_speak_cancel">Cancel</div>
+		<textarea id="bonzi_speak_text"></textarea>
+	</div>
+
+	<div class="xp_window" id="bonzi_chat_window" style="display:none">
+		<div class="xp_window_bar">
+			<div class="xp_window_icon"></div>
+			<div class="xp_window_text">BonziCHAT</div>
+		</div>
+		<div class="bonzi_chat_button" id="bonzi_chat_say"></div>
+		<div id="bonzi_chat_messages"></div>
+		<div id="bonzi_chat_online"></div>
+		<input id="bonzi_chat_text" type="text" placeholder="To chat click here. Chat '/?' or '/help' for help."/>
+	</div>
+
+	<div id="bonzi_cont" class="bonzi">
+		<canvas id="canvas" class="canvas_bonzi"></canvas>
+		<p class="bubble_xp" id="bonzi_xp_bubble" style="display:none"></p>
+	</div>
+
+	<div id="bonzi_xp_menu" class="xp_menu xp_menu_root">
+		<div class="xp_menu_list">
+			<div id="bonzi_speak">Speak</div>
+			<div id="bonzi_joke">Tell a Joke</div>
+			<div id="bonzi_fact">Tell an Amazing Fact</div>
+			<div id="bonzi_sing">Sing a Song</div>
+			<div id="bonzi_personality">Personality Settings</div>
+			<div onclick="window.open('outlookcal://')">Calendar</div>
+			<div id="xp_menu_animate">Animate!</div>
+			<div id="xp_menu_hide">Hide</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="titlebar">
+	<div id="minimize"></div>
+	<div id="maximize"></div>
+	<div id="close"></div>
+</div>
+
+</body>
 </html>
