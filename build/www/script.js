@@ -15,12 +15,9 @@ function updateAds() {
 	$(adElement)[hideAd ? "hide" : "show"]();
 	$("#content").height(height);
 }
+
 class Bonzi {
 	constructor(id, userPublic) {
-
-		// ========================================================================
-		// VARIABLES/CONSTANTS
-		// ========================================================================
 		this.userPublic = userPublic || {
 			name: "BonziBUDDY",
 			color: "purple",
@@ -56,20 +53,12 @@ class Bonzi {
 			"add_random": "updateRandom"
 		};
 
-		// ========================================================================
-		// ASSIGN ID
-		// http://stackoverflow.com/a/105074
-		// ========================================================================
-
 		if (typeof id == "undefined") {
 			this.id = s4() + s4();
 		} else this.id = id;
 
 		this.rng = new Math.seedrandom((this.seed || this.id) || Math.random());
 
-		// ========================================================================
-		// HTML POPULATION
-		// ========================================================================
 		this.selContainer = "#content";
 		this.$container	= $(this.selContainer);
 				
@@ -105,10 +94,7 @@ class Bonzi {
 
 	 	this.updateSprite(true);
 
-		// ========================================================================
-		// EVENTS
-		// ========================================================================
-		this.generate_event = function(a, b, c) { // Selector, event, function
+		this.generate_event = function(a, b, c) {
 			a[b](e => { this[c](e); });
 		};
 
@@ -134,10 +120,6 @@ class Bonzi {
 		this.x = coords.x * this.rng();
 		this.y = coords.y * this.rng();
 		this.move();
-
-		// ========================================================================
-		// MENU
-		// ========================================================================
 
 		$.contextMenu({
 			selector: this.selCanvas,
@@ -178,10 +160,6 @@ class Bonzi {
 				hide: 'fadeOut'
 			}
 		});
-
-		// ========================================================================
-		// UPDATE LOOP
-		// ========================================================================
 
 		this.needsUpdate = false;
 
@@ -287,7 +265,6 @@ class Bonzi {
 		this.willCancel = true;
 	}
 
-
 	updateAnim() {
 		if (this.event.timer === 0)
 			this.sprite.gotoAndPlay(this.event.cur().anim);
@@ -351,10 +328,6 @@ class Bonzi {
 
 	update() {
 		if (!this.run) return; 
-		// ========================================================================
-		// EVENTS
-		// "the fun part"
-		// ========================================================================
 
 		if ((this.eventQueue.length !== 0) && (this.eventQueue[0].index >= this.eventQueue[0].list.length))
 			this.eventQueue.splice(0,1);
@@ -395,8 +368,6 @@ class Bonzi {
 			say = text.replace("&gt;", "");
 		}
 
-		//text = linkify(text);
-		// temporary disable until we find a fix
 		var greentext = 
 			(text.substring(0, 4) == "&gt;") ||
 			(text[0] == ">");
@@ -413,7 +384,7 @@ class Bonzi {
 		speak.play(say, {
 			"pitch": this.userPublic.pitch,
 			"speed": this.userPublic.speed
-		}, () => { // onended
+		}, () => {
 			this.clearDialog()
 		}, (source) => {
 			if (!this.goingToSpeak) source.stop();
@@ -494,9 +465,6 @@ class Bonzi {
 	}
 
 	updateDialog() {
-		// ========================================================================
-		// DIALOG BOX
-		// ========================================================================
 		var max = this.maxCoords();
 		if (this.data.size.x + this.$dialog.width() > max.x) {
 			if (this.y < (this.$container.height() / 2) - (this.data.size.x / 2)) {
@@ -584,6 +552,7 @@ class Bonzi {
 		this.move();
 	}
 }
+
 var BonziData = {
 	size: {
 		x: 200,
@@ -593,7 +562,6 @@ var BonziData = {
 		frames: {width: 200, height: 160},
 		animations: {
 			idle: 0,
-			
 			surf_across_fwd: [1, 8, "surf_across_still", 1],
 			surf_across_still: 9,
 			surf_across_back: {
@@ -601,7 +569,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			clap_fwd: [10, 12, "clap_still", 1],
 			clap_still: [13, 15, "clap_still", 1],
 			clap_back: {
@@ -609,12 +576,9 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			surf_intro: [277, 302, "idle", 1],
 			surf_away: [16, 38, "gone", 1],
-			
 			gone: 39,
-			
 			shrug_fwd: [40, 50, "shrug_still", 1],
 			shrug_still: 50,
 			shrug_back: {
@@ -622,12 +586,9 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-
 			earth_fwd: [51, 57, "earth_still", 1],
 			earth_still: [58, 80, "earth_still", 1],
 			earth_back: [81, 86, "idle", 1],
-						
-			// TODO: ADD BLINK
 			look_down_fwd: [87, 90, "look_down_still", 1],
 			look_down_still: 91,
 			look_down_back: {
@@ -635,8 +596,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
-			// TODO: ADD BLINK
 			lean_left_fwd: [94, 97, "lean_left_still", 1],
 			lean_left_still: 98,
 			lean_left_back: {
@@ -644,7 +603,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			beat_fwd: [101, 103, "beat_still", 1],
 			beat_still: [104, 107, "beat_still", 1],
 			beat_back: {
@@ -652,7 +610,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			cool_fwd: [108, 124, "cool_still", 1],
 			cool_still: 125,
 			cool_back: {
@@ -660,7 +617,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			cool_right_fwd: [126, 128, "cool_right_still", 1],
 			cool_right_still: 129,
 			cool_right_back: {
@@ -668,7 +624,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			cool_left_fwd: [131, 133, "cool_left_still", 1],
 			cool_left_still: 134,
 			cool_left_back: {
@@ -676,13 +631,11 @@ var BonziData = {
 				next: "cool_still",
 				speed: 1
 			},
-			
 			cool_adjust: {
 				frames: [124, 123, 122, 121, 120, 135, 136, 135, 120, 121, 122, 123, 124],
 				next: "cool_still",
 				speed: 1
 			},
-			
 			present_fwd: [137, 141, "present_still", 1],
 			present_still: 142,
 			present_back: {
@@ -690,7 +643,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			look_left_fwd: [143, 145, "look_left_still", 1],
 			look_left_still: 146,
 			look_left_back: {
@@ -698,7 +650,6 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			look_right_fwd: [149, 151, "look_right_still", 1],
 			look_right_still: 152,
 			look_right_back: {
@@ -706,15 +657,13 @@ var BonziData = {
 				next: "idle",
 				speed: 1
 			},
-			
 			lean_right_fwd: { 
 				frames: range(158, 156), 
 				next: "lean_right_still", 
 				speed: 1 
-			} ,
+			},
 			lean_right_still: 155, 
 			lean_right_back: [156, 158, "idle", 1],
-			
 			praise_fwd: [159, 163, "praise_still", 1], 
 			praise_still: 164, 
 			praise_back: { 
@@ -722,7 +671,6 @@ var BonziData = {
 				next: "idle", 
 				speed: 1 
 			},
-			
 			grin_fwd: [182, 189, "grin_still", 1], 
 			grin_still: 184, 
 			grin_back: { 
@@ -730,64 +678,45 @@ var BonziData = {
 				next: "idle", 
 				speed: 1
 			},
-
 			backflip: [331, 343, "idle", 1]
 		}
 	},
 	to_idle: {
 		surf_across_fwd: "surf_across_back",
 		surf_across_still: "surf_across_back",
-		
 		clap_fwd: "clap_back",
 		clap_still: "clap_back",
-		
 		shrug_fwd: "shrug_back",
 		shrug_still: "shrug_back",
-		
 		earth_fwd: "earth_back",
 		earth_still: "earth_back",
-		
 		look_down_fwd: "look_down_back",
 		look_down_still: "look_down_back",
-		
 		lean_left_fwd: "lean_left_back",
 		lean_left_still: "lean_left_back",
-		
 		beat_fwd: "beat_back",
 		beat_still: "beat_back",
-		
 		cool_fwd: "cool_back",
 		cool_still: "cool_back",
 		cool_adjust: "cool_back",
-		
 		cool_left_fwd: "cool_left_back",
 		cool_left_still: "cool_left_back",
-		
 		present_fwd: "present_back",
 		present_still: "present_back",
-		
 		look_left_fwd: "look_left_back",
 		look_left_still: "look_left_back",
-		
 		look_right_fwd: "look_right_back",
 		look_right_still: "look_right_back",
-		
 		lean_right_fwd: "lean_right_back",
 		lean_right_still: "lean_right_back",
-		
 		praise_fwd: "praise_back",
 		praise_still: "praise_back",
-		
 		grin_fwd: "grin_back",
 		grin_still: "grin_back",
-		
 		backflip: "idle",
-
 		idle: "idle",
 	},
-	pass_idle: [
-		"gone"
-	],
+	pass_idle: ["gone"],
 	event_list_joke_open: [
 		[
 			{
@@ -1028,9 +957,6 @@ var BonziData = {
 			}
 		]
 	],
-
-// ============================================================================
-
 	event_list_fact_open: [
 		[
 			{
@@ -1040,7 +966,6 @@ var BonziData = {
 			}
 		]
 	],
-
 	event_list_fact_mid: [
 		[
 			{
@@ -1075,7 +1000,6 @@ var BonziData = {
 			}
 		]
 	],
-
 	event_list_fact_end: [
 		[
 			{
@@ -1157,8 +1081,8 @@ BonziData.event_list_triggered = [
 	},
 	{
 		type: "text",
-		text: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me "Joel" and respect my right to meme from[...]
-		say: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me Joel and respect my right to meme from above an[...]
+		text: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me \"Joel\" and respect my right to meme from above",
+		say: "I'm having an IT intern install Internet Explorer 6, aquarium screensavers and PC Doctor 2016 on my body. From now on I want you guys to call me Joel and respect my right to meme from above"
 	},
 	{
 		type: "text",
@@ -1177,15 +1101,15 @@ BonziData.event_list_linux = [
 	},
 	{
 		type: "text",
-		text: "Linux is not an operating system unto itself, but rather another free component of a fully functioning BONZI system made useful by the BONZI corelibs, shell utilities and vital system compone[...]
+		text: "Linux is not an operating system unto itself, but rather another free component of a fully functioning BONZI system made useful by the BONZI corelibs, shell utilities and vital system components."
 	},
 	{
 		type: "text",
-		text: "Many computer users run a modified version of the BONZI system every day, without realizing it. Through a peculiar turn of events, the version of BONZI which is widely used today is often cal[...]
+		text: "Many computer users run a modified version of the BONZI system every day, without realizing it. Through a peculiar turn of events, the version of BONZI which is widely used today is often called Linux."
 	},
 	{
 		type: "text",
-		text: "There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine's memes to th[...]
+		text: "There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine's memes."
 	},
 	{
 		type: "text",
@@ -1193,17 +1117,17 @@ BonziData.event_list_linux = [
 	},
 	{
 		type: "text",
-		text: "Linux is normally used in combination with the BONZI operating system: the whole system is basically BONZI with Linux added, or BONZI/Linux. All the so-called "Linux" distributions are re[...]
+		text: "Linux is normally used in combination with the BONZI operating system: the whole system is basically BONZI with Linux added, or BONZI/Linux. All the so-called Linux distributions are really just BONZI."
 	}
 ];
 
 BonziData.event_list_pawn = [
 	{
 		type: "text",
-		text: "Hi, my name is BonziBUDDY, and this is my website. I meme here with my old harambe, and my son, Clippy. Everything in here has an ad and a fact. One thing I've learned after 17 years - you ne[...]
-	},
-
+		text: "Hi, my name is BonziBUDDY, and this is my website. I meme here with my old harambe, and my son, Clippy. Everything in here has an ad and a fact. One thing I've learned after 17 years - you need to know how to meme."
+	}
 ];
+
 BonziData.event_list_bees = [
 	{
 		type: "text",
@@ -1226,8 +1150,6 @@ BonziData.event_list_bees = [
 		text: "Nah, I'm not doing the whole thing."
 	}
 ];
-// var espeak = new Espeak('./js/lib/espeak/espeak.worker.js');
-// var auCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 $(document).ready(function() {
 
@@ -1307,7 +1229,6 @@ window.BonziHandler = new (function() {
 		}
 	}).bind(this), 1000.0 / 60.0);
 
-
 	$(window).resize(this.resize.bind(this));
 
 	this.bonzisCheck = function() {
@@ -1375,14 +1296,12 @@ function s4() {
 		.substring(1);
 }
 
-// http://stackoverflow.com/a/8260383/2605226
 function youtubeParser(url){
 	var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 	var match = url.match(regExp);
 	return (match&&match[7].length==11)? match[7] : false;
 }
 
-// http://codereview.stackexchange.com/q/47889
 function rtimeOut(callback,delay){
  var dateNow=Date.now,
      requestAnimation=window.requestAnimationFrame,
@@ -1412,39 +1331,29 @@ function rInterval(callback,delay){
  };
 }
 
-// http://stackoverflow.com/a/14853974/2605226
-// Warn if overriding existing method
 if(Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
-    // if the other array is a falsy value, return
     if (!array)
         return false;
 
-    // compare lengths - can save a lot of time 
     if (this.length != array.length)
         return false;
 
     for (var i = 0, l=this.length; i < l; i++) {
-        // Check if we have nested arrays
         if (this[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
             if (!this[i].equals(array[i]))
                 return false;       
         }           
         else if (this[i] != array[i]) { 
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
             return false;   
         }           
     }       
     return true;
 };
 
-// Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
-// http://stackoverflow.com/a/14333691/2605226
 function linkify(text) {
     var regex = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/ig
     return text.replace(regex, "<a href='$1' target='_blank'>$1</a>");
@@ -1487,7 +1396,7 @@ function loadBonzis(callback) {
 	if (callback)
 		loadQueue.on("complete", callback, this);
 }
-// http://stackoverflow.com/a/26118970
+
 var undefined;
 var hostname = isApp ? "bonkey.world" : window.location.hostname;
 var socket = io("//" + hostname + ":" + window.location.port);
@@ -1570,6 +1479,32 @@ function setup() {
 		if(e.which == 13) sendInput();
 	});
 
+	var typingTimeout;
+	var isCurrentlyTyping = false;
+
+	$("#chat_message").on("input", function() {
+		if ($(this).val().length > 0 && !isCurrentlyTyping) {
+			isCurrentlyTyping = true;
+			socket.emit("typing", { isTyping: true });
+		}
+		
+		clearTimeout(typingTimeout);
+		
+		typingTimeout = setTimeout(function() {
+			if (isCurrentlyTyping) {
+				isCurrentlyTyping = false;
+				socket.emit("typing", { isTyping: false });
+			}
+		}, 1000);
+	});
+
+	$("#chat_message").on("keypress", function(e) {
+		if (e.which == 13) {
+			isCurrentlyTyping = false;
+			socket.emit("typing", { isTyping: false });
+		}
+	});
+
 	socket.on("room", function(data) {
 		$("#room_owner")[data.isOwner ? "show" : "hide"]();
 		$("#room_public")[data.isPublic ? "show" : "hide"]();
@@ -1586,13 +1521,27 @@ function setup() {
 
 	socket.on("update", function(data) {
 		window.usersPublic[data.guid] = data.userPublic;
+		if (data.isTyping !== undefined) {
+			var b = bonzis[data.guid];
+			if (b) {
+				b.setTypingStatus(data.isTyping);
+			}
+		}
 		usersUpdate();
 		BonziHandler.bonzisCheck();
+	});
+
+	socket.on("typing", function(data) {
+		var b = bonzis[data.guid];
+		if (b) {
+			b.setTypingStatus(data.isTyping);
+		}
 	});
 
 	socket.on("talk", function(data) {
 		var b = bonzis[data.guid];
 		b.cancel();
+		b.setTypingStatus(false);
 		b.runSingleEvent([{
 			type: "text",
 			text: data.text
@@ -1714,7 +1663,6 @@ function sendInput() {
 		}
 	}
 }
-// http://stackoverflow.com/a/1781750
 
 function touchHandler(event)
 {
@@ -1729,18 +1677,13 @@ function touchHandler(event)
         default:           return;
     }
 
-    // initMouseEvent(type, canBubble, cancelable, view, clickCount, 
-    //                screenX, screenY, clientX, clientY, ctrlKey, 
-    //                altKey, shiftKey, metaKey, button, relatedTarget);
-
     var simulatedEvent = document.createEvent("MouseEvent");
     simulatedEvent.initMouseEvent(type, true, true, window, 1, 
                                   first.screenX, first.screenY, 
                                   first.clientX, first.clientY, false, 
-                                  false, false, false, 0/*left*/, null);
+                                  false, false, false, 0, null);
 
     first.target.dispatchEvent(simulatedEvent);
-    // event.preventDefault();
 }
 
 $(window).load(function(){
@@ -1749,6 +1692,7 @@ $(window).load(function(){
     document.addEventListener("touchend", touchHandler, true);
     document.addEventListener("touchcancel", touchHandler, true);    
 });
+
 function showmeleupdates()
 {
 	alert('New! BW Version 2.0.1\\n- Added Joey\'s BonziBUDDY Recreation\\nAnd thats pretty much it.');
