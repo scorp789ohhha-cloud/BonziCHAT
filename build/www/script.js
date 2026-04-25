@@ -1151,6 +1151,22 @@ BonziData.event_list_bees = [
 	}
 ];
 
+var chatTypingUsers = {};
+
+function updateChatTypingDisplay() {
+	var names = Object.values(chatTypingUsers);
+	var el = $("#bonzi_chat_typing");
+	if (names.length === 0) {
+		el.text("");
+	} else if (names.length === 1) {
+		el.text(names[0] + " is typing...");
+	} else if (names.length === 2) {
+		el.text(names[0] + " and " + names[1] + " are typing...");
+	} else {
+		el.text(names.slice(0, -1).join(", ") + " and " + names[names.length - 1] + " are typing...");
+	}
+}
+
 $(document).ready(function() {
 
 window.BonziHandler = new (function() {
@@ -1535,6 +1551,12 @@ function setup() {
 		var b = bonzis[data.guid];
 		if (b) {
 			b.setTypingStatus(data.isTyping);
+			if (data.isTyping) {
+				chatTypingUsers[data.guid] = b.userPublic.name;
+			} else {
+				delete chatTypingUsers[data.guid];
+			}
+			updateChatTypingDisplay();
 		}
 	});
 
@@ -1542,6 +1564,8 @@ function setup() {
 		var b = bonzis[data.guid];
 		b.cancel();
 		b.setTypingStatus(false);
+		delete chatTypingUsers[data.guid];
+		updateChatTypingDisplay();
 		b.runSingleEvent([{
 			type: "text",
 			text: data.text
@@ -1621,6 +1645,8 @@ function setup() {
 	socket.on("leave", function(data) {
 		var b = bonzis[data.guid];
 		if (typeof b != "undefined") {
+			delete chatTypingUsers[data.guid];
+			updateChatTypingDisplay();
 			b.exit((function(data) {
 				this.deconstruct();
 				delete bonzis[data.guid];
@@ -1695,5 +1721,5 @@ $(window).load(function(){
 
 function showmeleupdates()
 {
-	alert('New! BW Version 2.0.1\\n- Added Joey\'s BonziBUDDY Recreation\\nAnd thats pretty much it.');
+	alert('New! BW Version 2.0.1\n- Added Joey\'s BonziBUDDY Recreation\nAnd thats pretty much it.');
 }
