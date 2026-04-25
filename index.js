@@ -7,25 +7,25 @@ const fs = require('fs-extra');
 
 // Load settings
 try {
-	stats = fs.lstatSync('settings.json');
+        stats = fs.lstatSync('settings.json');
 } catch (e) {
-	// If settings do not yet exist
-	if (e.code == "ENOENT") {
-		try {
-			fs.copySync(
-				'settings.example.json',
-				'settings.json'
-			);
-			console.log("Created new settings file.");
-		} catch(e) {
-			console.log(e);
-			throw "Could not create new settings file.";
-		}
-	// Else, there was a misc error (permissions?)
-	} else {
-		console.log(e);
-		throw "Could not read 'settings.json'.";
-	}
+        // If settings do not yet exist
+        if (e.code == "ENOENT") {
+                try {
+                        fs.copySync(
+                                'settings.example.json',
+                                'settings.json'
+                        );
+                        console.log("Created new settings file.");
+                } catch(e) {
+                        console.log(e);
+                        throw "Could not create new settings file.";
+                }
+        // Else, there was a misc error (permissions?)
+        } else {
+                console.log(e);
+                throw "Could not read 'settings.json'.";
+        }
 }
 
 // Load settings into memory
@@ -35,7 +35,7 @@ const settings = require("./settings.json");
 var express = require('express');
 var app = express();
 if (settings.express.serveStatic)
-	app.use(express.static('./build/www'));
+        app.use(express.static('./build/www'));
 var server = require('http').createServer(app);
 
 // Init socket.io
@@ -57,14 +57,14 @@ const Ban = require('./ban.js');
 Ban.init();
 
 // Start actually listening
-server.listen(port, function () {
-	console.log(
-		" Welcome to BonziCHAT!\n",
-		"Time to pop bubblegum!\n",
-		"Leaked by KKK Fan",
-		"----------------------\n",
-		"Server listening at port " + port
-	);
+server.listen(port, '0.0.0.0', function () {
+        console.log(
+                " Welcome to BonziCHAT!\n",
+                "Time to pop bubblegum!\n",
+                "Leaked by KKK Fan",
+                "----------------------\n",
+                "Server listening at port " + port
+        );
 });
 app.use(express.static(__dirname + '/public'));
 

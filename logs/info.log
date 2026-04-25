@@ -15,3 +15,7 @@
 {"guid":"96d7207cbeb33618","roomSpecified":false,"level":"info","message":"roomSpecified"}
 {"guid":"18d70710fd97b0d2","text":"Hey, <font color=\"orange\"><font color=\"red\">Anonymous5631</font></font>! ","level":"info","message":"talk"}
 {"room":{"rid":"3fcb52140f9b7097","prefs":{"char_limit":2500,"name_limit":25,"godword":null,"runlevel":{"godmode":0,"youtube":0,"joke":0,"fact":0,"backflip":0,"color":0,"asshole":0,"triggered":0,"linux":0,"pitch":0,"speed":0,"pawn":0,"bees":0,"vaporwave":0,"unvaporwave":0,"name":0,"owo":0,"sanitize":3,"pope":3},"room_max":8,"owner":null,"pitch":{"max":125,"min":15,"default":"random"},"speed":{"max":275,"min":125,"default":"random"},"defaultName":"Anonymous"},"users":[]},"level":"info","message":"removeRoom"}
+{"guid":"de318670e2759ee6","level":"info","message":"login"}
+{"guid":"de318670e2759ee6","roomSpecified":false,"level":"info","message":"roomSpecified"}
+{"rid":"2e5269343dc8e89e","level":"info","message":"newRoom"}
+{"room":{"rid":"2e5269343dc8e89e","prefs":{"char_limit":2500,"name_limit":25,"godword":null,"runlevel":{"godmode":0,"youtube":0,"joke":0,"fact":0,"backflip":0,"color":0,"asshole":0,"triggered":0,"linux":0,"pitch":0,"speed":0,"pawn":0,"bees":0,"vaporwave":0,"unvaporwave":0,"name":0,"owo":0,"sanitize":3,"pope":3},"room_max":8,"owner":null,"pitch":{"max":125,"min":15,"default":"random"},"speed":{"max":275,"min":125,"default":"random"},"defaultName":"Anonymous"},"users":[]},"level":"info","message":"removeRoom"}
