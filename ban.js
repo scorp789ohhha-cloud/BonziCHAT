@@ -18,74 +18,82 @@ exports.init = function() {
 };
 
 exports.saveBans = function() {
-	fs.writeFile(
-		"./bans.json",
-		JSON.stringify(bans),
-		{ flag: 'w' },
-		function(error) {
-			log.info.log('info', 'banSave', {
-				error: error
-			});
-		}
-	);
+        fs.writeFile(
+                "./bans.json",
+                JSON.stringify(bans),
+                { flag: 'w' },
+                function(error) {
+                        log.info.log('info', 'banSave', {
+                                error: error
+                        });
+                }
+        );
 };
+
+function getSocketIp(socket) {
+        try {
+                return (socket.handshake && socket.handshake.headers && socket.handshake.headers["cf-connecting-ip"])
+                        || (socket.request && socket.request.connection && socket.request.connection.remoteAddress)
+                        || null;
+        } catch (e) { return null; }
+}
 
 // Ban length is in minutes
 exports.addBan = function(ip, length, reason) {
-	length = parseFloat(length) || settings.banLength;
-	reason = reason || "N/A";
-	bans[ip] = {
-		reason: reason,
-		end: new Date().getTime() + (length * 60000)
-	};
+        length = parseFloat(length) || settings.banLength;
+        reason = reason || "N/A";
+        bans[ip] = {
+                reason: reason,
+                end: new Date().getTime() + (length * 60000)
+        };
 
-	var sockets = io.sockets.sockets;
-	var socketList = Object.keys(sockets);
+        var sockets = io.sockets.sockets;
+        var socketList = Object.keys(sockets);
 
-	for (var i = 0; i < socketList.length; i++) {
-		var socket = sockets[socketList[i]];
-		if (socket.request.connection.remoteAddress == ip)
-			exports.handleBan(socket);
-	}
-	exports.saveBans();
+        for (var i = 0; i < socketList.length; i++) {
+                var socket = sockets[socketList[i]];
+                if (getSocketIp(socket) == ip)
+                        exports.handleBan(socket);
+        }
+        exports.saveBans();
 };
 
 exports.removeBan = function(ip) {
-	delete bans[ip];
-	exports.saveBans();
+        delete bans[ip];
+        exports.saveBans();
 };
 
 exports.handleBan = function(socket) {
-	var ip = socket.request.connection.remoteAddress;
-	if (bans[ip].end <= new Date().getTime()) {
-		exports.removeBan(ip);
-		return false;
-	}
+        var ip = socket.request.connection.remoteAddress;
+        if (bans[ip].end <= new Date().getTime()) {
+                exports.removeBan(ip);
+                return false;
+        }
 
-	log.access.log('info', 'ban', {
-		ip: ip
-	});
-	socket.emit('ban', {
-		reason: bans[ip].reason,
-		end: bans[ip].end
-	});
-	socket.disconnect();
-	return true;
+        log.access.log('info', 'ban', {
+                ip: ip
+        });
+        socket.emit('ban', {
+                reason: bans[ip].reason,
+                end: bans[ip].end
+        });
+        socket.disconnect();
+        return true;
 };
 
 exports.kick = function(ip, reason) {
-	var sockets = io.sockets.sockets;
-	var socketList = Object.keys(sockets);
+        var sockets = io.sockets.sockets;
+        var socketList = Object.keys(sockets);
 
-	for (var i = 0; i < socketList.length; i++) {
-		var socket = sockets[socketList[i]];
-		if (socket.request.connection.remoteAddress == ip) {
-			socket.emit('kick', {
-				reason: reason || "N/A"
-			});
-			socket.disconnect();
-		}
-	}
+        for (var i = 0; i < socketList.length; i++) {
+                var socket = sockets[socketList[i]];
+                if (socket.request.connection.remoteAddress == ip) {
+                        socket.emit('kick', {
+                                reason: reason || "N/A"
+                        });
+                        socket.disconnect();
+                }
+        }
 };
 
 exports.isBanned = function(ip) {
