@@ -308,8 +308,14 @@ let userCommands = {
             });
         } catch (e) {}
 
-        // Ban.addBan handles disconnect of all sockets from this IP and persists the ban
-        Ban.addBan(ip, lenMins, reason);
+        // Persist the ban entry. Wrapped so any save/iteration error doesn't kill the request.
+        try { Ban.addBan(ip, lenMins, reason); } catch (e) {
+            log.info.log('warn', 'banAddErr', { exception: String(e) });
+        }
+
+        // Force-disconnect ONLY the actual socket once.
+        // The socket's disconnect listener (User.disconnect) handles room cleanup.
+        try { target.socket.disconnect(true); } catch (e) {}
 
         log.info.log('info', 'ban', {
             by: this.guid,
