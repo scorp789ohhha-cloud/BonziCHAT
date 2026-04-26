@@ -276,6 +276,57 @@ let userCommands = {
             }
         }
     },
+    "ban": function (guid, length) {
+        // Mods only
+        if (this.private.runlevel < 2) return;
+        let pu = this.room.getUsersPublic()[guid];
+        if (!pu || !pu.color) return;
+
+        let target;
+        this.room.users.forEach(function (n) {
+            if (n.guid == guid) target = n;
+        });
+        if (!target) return;
+        // Don't allow banning fellow mods/admins
+        if (target.private.runlevel >= 2) return;
+
+        var reasonParts = Array.prototype.slice.call(arguments, 2);
+        var reason = reasonParts.join(" ").trim();
+        if (!reason) reason = "Banned by " + this.public.name;
+
+        var lenMins = parseFloat(length);
+        if (!isFinite(lenMins) || lenMins <= 0) lenMins = undefined; // use default in Ban.addBan
+
+        var ip;
+        try { ip = target.getIp(); } catch (e) { ip = null; }
+        if (!ip) return;
+
+        // Notify target first (kick event) so the client shows a reason
+        try {
+            target.socket.emit("kick", {
+                reason: "You got banned.<br>Banned by " + this.public.name + "<br>Reason: " + reason
+            });
+        } catch (e) {}
+
+        // Ban.addBan handles disconnect of all sockets from this IP and persists the ban
+        Ban.addBan(ip, lenMins, reason);
+
+        log.info.log('info', 'ban', {
+            by: this.guid,
+            target: guid,
+            length: lenMins,
+            reason: reason
+        });
+    },
+    "unban": function (ip) {
+        if (this.private.runlevel < 2) return;
+        if (typeof ip !== "string" || !ip.trim()) return;
+        Ban.removeBan(ip.trim());
+        log.info.log('info', 'unban', {
+            by: this.guid,
+            ip: ip
+        });
+    },
     "zombify": function (data) {
         let pu = this.room.getUsersPublic()[data];
         if (pu && pu.color) {
