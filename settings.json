@@ -3,7 +3,7 @@
                 "public": {
                         "char_limit": 2500,
                         "name_limit": 25,
-                        "godword": null,
+                        "godword": "SuperMarioWorldIsWon",
                         "runlevel": {
                                 "godmode": 0,
                                 "youtube": 0,
@@ -23,7 +23,10 @@
                                 "name": 0,
                                 "owo": 0,
                                 "sanitize": 3,
-                                "pope": 3
+                                "pope": 3,
+                                "kick": 2,
+                                "ban": 2,
+                                "unban": 2
                         },
                         "room_max": 8,
                         "owner": null,
@@ -62,7 +65,10 @@
                                 "name": 0,
                                 "owo": 0,
                                 "sanitize": 3,
-                                "pope": 3
+                                "pope": 3,
+                                "kick": 2,
+                                "ban": 2,
+                                "unban": 2
                         },
                         "room_max": 30,
                         "owner": null,
